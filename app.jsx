@@ -37,5 +37,14 @@ app.post('/api/items', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+app.get('/api/items', async (req, res) => {
+  try {
+    const items = await Item.find();
+    res.json(items);
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -14,8 +14,12 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch((err) => console.error('MongoDB connection error:', err));
 
 const itemSchema = new mongoose.Schema({
-  name: String,
-  description: String,
+  first: String,
+  last: String,
+  email: String,
+  number: String,
+  company: String,
+  web: String,
 });
 
 const Item = mongoose.model('Item', itemSchema, 'item');
@@ -27,22 +31,13 @@ app.use(cors({
 
 app.post('/api/items', async (req, res) => {
   try {
-    const { name, description } = req.body;
-    const newItem = new Item({ name, description });
+    const { first, last, email, number, company, web } = req.body;
+    const newItem = new Item({ first, last, email, number, company, web });
     await newItem.save();
     console.log('Item created successfully:', newItem);
     res.status(201).json({ message: 'Item created successfully', item: newItem });
   } catch (error) {
     console.error('Error creating item:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-app.get('/api/items', async (req, res) => {
-  try {
-    const items = await Item.find();
-    res.json(items);
-  } catch (error) {
-    console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
